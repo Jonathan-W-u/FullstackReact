@@ -4,7 +4,7 @@
  * @Author: jonathanWu
  * @Date: 2023-03-16 11:14:51
  * @LastEditors: jonathanWu
- * @LastEditTime: 2023-03-22 19:51:27
+ * @LastEditTime: 2023-03-22 21:26:18
  */
 class TimersDashboard extends React.Component{
     state ={
@@ -62,7 +62,6 @@ class EditableTimerList extends React.Component{
                 runningSince={timer.runningSince}
             />
         ));
-        // console.log(timers);
         return(
             <div id='timers'>
                 {timers}
