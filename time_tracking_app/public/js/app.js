@@ -4,7 +4,7 @@
  * @Author: jonathanWu
  * @Date: 2023-03-16 11:14:51
  * @LastEditors: jonathanWu
- * @LastEditTime: 2023-03-17 19:09:43
+ * @LastEditTime: 2023-03-22 19:51:27
  */
 class TimersDashboard extends React.Component{
     state ={
@@ -25,6 +25,14 @@ class TimersDashboard extends React.Component{
             },
         ],
     }
+
+    handleCreateFormSubmit = (timer) => {
+        const t = helpers.newTimer(timer);
+        this.setState({
+            timers:this.state.timers.concat(t)
+        })
+    }
+
     render(){
         console.log('正常！');
         return(
@@ -34,7 +42,7 @@ class TimersDashboard extends React.Component{
                         timers={this.state.timers}
                     />
                     <ToggleableTimerForm
-                        // isOpen={true}
+                        onFormSubmit = {this.handleCreateFormSubmit}
                     />
                 </div>
             </div>
@@ -54,7 +62,7 @@ class EditableTimerList extends React.Component{
                 runningSince={timer.runningSince}
             />
         ));
-        console.log(timers);
+        // console.log(timers);
         return(
             <div id='timers'>
                 {timers}
@@ -92,10 +100,10 @@ class EditableTimer extends React.Component{
                     id={this.props.id}
                     title={this.props.title}
                     project={this.props.project}
-                    />
-                    );
-                }else{
-                    return(
+                />
+            );
+        }else{
+            return(
                 <Timer
                     id={this.props.id}
                     title={this.props.title}
@@ -109,25 +117,61 @@ class EditableTimer extends React.Component{
 }
 
 class TimerForm extends React.Component{
+    state = {
+        title:this.props.title || '',
+        project:this.props.project || '',
+    };
+
+    handleTitleChange = (e)=>{
+        this.setState({title:e.target.value})
+        console.log(e)
+    };
+
+    handleProjectChange = (e)=>{
+        this.setState({project:e.target.value})
+    };
+
+    handleSubmit = ()=>{
+        this.props.onFormSubmit({
+            id: this.props.id,
+            title:this.state.title,
+            project:this.state.project,
+        });
+    }
+
     render(){
-        const submitText = this.props.title ? 'Update' : 'create';
+        const submitText = this.props.id ? 'Update' : 'create';
         return(
             <div className='ui centered card'>
                 <div className='content'>
                     <div className='ui form'>
                         <div className='field'>
                             <label>Title</label>
-                            <input type='text' defaultValue={this.props.title} />
+                            <input 
+                                type='text' 
+                                defaultValue={this.state.title} 
+                                onChange={this.handleTitleChange}
+                            />
                         </div>
                         <div className='field'>
                             <label>Project</label>
-                            <input type='text' defaultValue={this.props.project}/>
+                            <input 
+                                type='text' 
+                                defaultValue={this.state.project}
+                                onChange={this.handleProjectChange}
+                            />
                         </div>
                         <div className='ui two bottom attached buttons'>
-                            <button className='ui basic blue button'>
+                            <button 
+                                className='ui basic blue button'
+                                onClick = {this.handleSubmit}
+                            >
                                 {submitText}
                             </button>
-                            <button className='ui basic red button'>
+                            <button 
+                                className='ui basic red button'
+                                onClick = {this.props.onFormClose}
+                            >
                                 Cancel
                             </button>
                         </div>
@@ -139,15 +183,47 @@ class TimerForm extends React.Component{
 }
 
 class ToggleableTimerForm extends React.Component{
+    state ={
+        isOpen:false,
+    };
+
+    handleFormOpen=()=>{
+        this.setState({isOpen:true});
+        /* if(this.state.isOpen){
+            this.setState({isOpen:false});
+            console.log(this.state.isOpen)
+        }else{
+            this.setState({isOpen:true});
+            console.log(this.state.isOpen)
+        } */
+    };
+
+    handleFormClose = ()=>{
+        this.setState({isOpen:false});
+    };
+
+    handleFormSubmit = (timer) =>{
+        this.props.onFormSubmit(timer);
+        this.setState({isOpen:false});
+    };
+
+
+
     render(){
-        if (this.props.isOpen){
+        if (this.state.isOpen){
             return(
-                <TimerForm/>
+                <TimerForm
+                    onFormSubmit = {this.handleFormSubmit}
+                    onFormClose = {this.handleFormClose}
+                />
             );
         }else{
             return(
             <div className='ui basic content center aligned segment'>
-                <button className='ui basic button icon'>
+                <button 
+                    className='ui basic button icon'
+                    onClick={this.handleFormOpen}
+                >
                     <i className='plus icon'/>
                 </button>
             </div>
