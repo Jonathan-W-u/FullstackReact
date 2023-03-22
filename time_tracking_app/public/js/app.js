@@ -4,7 +4,7 @@
  * @Author: jonathanWu
  * @Date: 2023-03-16 11:14:51
  * @LastEditors: jonathanWu
- * @LastEditTime: 2023-03-22 21:26:18
+ * @LastEditTime: 2023-03-22 21:55:58
  */
 class TimersDashboard extends React.Component{
     state ={
@@ -188,13 +188,6 @@ class ToggleableTimerForm extends React.Component{
 
     handleFormOpen=()=>{
         this.setState({isOpen:true});
-        /* if(this.state.isOpen){
-            this.setState({isOpen:false});
-            console.log(this.state.isOpen)
-        }else{
-            this.setState({isOpen:true});
-            console.log(this.state.isOpen)
-        } */
     };
 
     handleFormClose = ()=>{
